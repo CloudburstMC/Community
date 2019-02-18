@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'io.franzbecker.gradle-lombok' version '1.14' apply false
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+allprojects {
+    group 'com.nukkitx.server'
+    version '0.0.1'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.franzbecker.gradle-lombok'
+
+    sourceCompatibility = 1.8
+
+    ext {
+        porklibVersion = '0.3.0-SNAPSHOT'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name = 'NukkitX'
+            url = 'https://repo.nukkitx.com/main/'
+        }
+        maven {
+            name = "DaPorkchop_"
+            url = "https://maven.daporkchop.net/"
+        }
+        maven {
+            name = 'sonatype'
+            url = 'https://oss.sonatype.org/content/groups/public/'
+        }
+    }
+
+    dependencies {
+        compileOnly 'cn.nukkit:nukkit:1.0-SNAPSHOT'
+
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+
+    processResources {
+        from(sourceSets.main.resources.srcDirs) {
+            filter ReplaceTokens, tokens: [version: version]
+        }
+    }
+
+    jar {
+        from {
+            configurations.compile.collect {
+                zipTree(it)
+            }
+        } {
+            exclude "META-INF/*.SF"
+            exclude "META-INF/*.DSA"
+            exclude "META-INF/*.RSA"
+        }
+    }
+}

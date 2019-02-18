@@ -1,0 +1,9 @@
+dependencies {
+    compileOnly "org.itxtech.nemisys:nemisys:1.0-SNAPSHOT"
+
+    compile ("net.daporkchop.lib:config:$porklibVersion") {
+        exclude group: "com.google.code.gson"
+    }
+    compile "net.daporkchop.lib:db:$porklibVersion"
+    //compile "net.daporkchop.lib:http:$porklibVersion"
+}

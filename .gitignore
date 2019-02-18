@@ -1,3 +1,14 @@
 /*.jar
 logs/
+*.log
 worlds/
+/nemisys/nemisys.jar
+
+.gradle/
+out/
+.idea/
+*.ipr
+*.iml
+*.class
+build/
+
