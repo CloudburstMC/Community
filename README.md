@@ -1,0 +1,3 @@
+# NukkitX community server
+
+placeholder
