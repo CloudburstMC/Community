@@ -12,3 +12,14 @@ out/
 *.class
 build/
 
+#server files
+banned-ips.json
+banned-players.json
+creativeitems.json
+ops.txt
+recipes.json
+white-list.txt
+
+#plugin files
+bStats/
+FastAsyncWorldEdit/

@@ -1,5 +1,6 @@
 package com.nukkitx.server.proxy;
 
+import com.nukkitx.server.proxy.command.CommandHub;
 import net.daporkchop.lib.binary.stream.DataOut;
 import net.daporkchop.lib.config.PConfig;
 import net.daporkchop.lib.config.decoder.PorkConfigDecoder;
@@ -19,22 +20,24 @@ public class ProxyMain extends PluginBase {
     @Override
     public void onEnable() {
         INSTANCE = this;
+        this.onReload();
 
         {
             Thread t = new Thread(() -> {
                 while (true) {
-                    this.onReload();
                     try {
                         Thread.sleep(TimeUnit.HOURS.toMillis(1));
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    this.onReload();
                 }
             });
             t.setDaemon(true);
             t.start();
         }
 
+        this.getServer().getCommandMap().register("proxy", new CommandHub());
         this.getServer().getPluginManager().registerEvents(new ProxyListener(), this);
     }
 
