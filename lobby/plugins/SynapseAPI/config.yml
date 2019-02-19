@@ -3,7 +3,7 @@ disable-rak: true
 enable: true
 
 entries:
-  - server-ip: 46.234.39.170
+  - server-ip: localhost
     server-port: 10305
     isMainServer: true
     isLobbyServer: true
