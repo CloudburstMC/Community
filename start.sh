@@ -3,7 +3,7 @@
 while true
 do
 	echo "Starting Nukkit server for $1..."
-	../update.sh
+	./update.sh
 	cd $1
 
 	#create symlinks for shared plugin files

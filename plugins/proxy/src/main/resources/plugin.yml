@@ -7,4 +7,10 @@ description: Misc. utils for the nemisys proxy running the NukkitX community ser
 website: https://github.com/NukkitX/Community
 commands:
   hub:
+    description: teleports you to the hub
     aliases: ["lobby"]
+  proxy:
+    description: admin commands
+  server:
+    description: teleports you to a given server
+    aliases: ["transfer","s"]
