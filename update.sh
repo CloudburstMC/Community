@@ -1,5 +1,6 @@
 #!/bin/bash
 
+./compile.sh
 #TODO: save version
 echo "Fetching latest NukkitX jar from Jenkins..."
 wget https://ci.nukkitx.com/job/NukkitX/job/Nukkit/job/master/lastSuccessfulBuild/artifact/target/nukkit-1.0-SNAPSHOT.jar
