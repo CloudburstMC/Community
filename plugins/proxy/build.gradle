@@ -1,4 +1,6 @@
 dependencies {
+    compile project(":common")
+
     compileOnly "org.itxtech.nemisys:nemisys:1.0-SNAPSHOT"
 
     compile ("net.daporkchop.lib:config:$porklibVersion") {

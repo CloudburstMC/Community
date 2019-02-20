@@ -1,5 +1,6 @@
 package com.nukkitx.server.proxy.command;
 
+import com.nukkitx.server.common.messaging.impl.MessageSetOp;
 import com.nukkitx.server.proxy.ProxyMain;
 import org.itxtech.nemisys.Player;
 import org.itxtech.nemisys.command.Command;
@@ -49,7 +50,11 @@ public class ProxyCommandExecutor implements CommandExecutor {
                     return true;
                 }
                 ProxyMain.INSTANCE.playerData.getUnchecked(uuid).setAdmin(strings[0].charAt(0) == 'o');
+                ProxyMain.broadcast(new MessageSetOp(uuid, strings[0].charAt(0) == 'o'));
                 sender.sendMessage(String.format("§aPlayer \"%s\" %sopped!", strings[1], strings[0].charAt(0) == 'o' ? "" : "de"));
+                break;
+            case "stop":
+                sender.sendMessage("§aStopping network...");
                 break;
             default:
                 sender.sendMessage(String.format("§cUnknown action: \"%s\"", strings[0]));

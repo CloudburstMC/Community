@@ -4,6 +4,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
+import com.nukkitx.server.common.messaging.Message;
+import com.nukkitx.server.common.messaging.MessageRegistry;
 import com.nukkitx.server.proxy.command.ProxyCommandExecutor;
 import com.nukkitx.server.proxy.command.ServerCommandExecutor;
 import com.nukkitx.server.proxy.command.SpecificServerCommandExecutor;
@@ -26,8 +28,6 @@ import net.daporkchop.lib.db.container.map.key.DefaultKeyHasher;
 import net.daporkchop.lib.encoding.compression.Compression;
 import net.daporkchop.lib.hash.util.Digest;
 import net.daporkchop.lib.nbt.util.IndirectNBTSerializer;
-import org.itxtech.nemisys.Client;
-import org.itxtech.nemisys.Player;
 import org.itxtech.nemisys.command.PluginCommand;
 import org.itxtech.nemisys.plugin.PluginBase;
 
@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 /**
@@ -44,8 +45,14 @@ import java.util.function.Supplier;
 public class ProxyMain extends PluginBase {
     public static ProxyMain INSTANCE;
 
-    public PorkDB db;
+    @SuppressWarnings("unchecked")
+    public static void broadcast(@NonNull Message message) {
+        MessageRegistry.INSTANCE.send(message, INSTANCE.getServer().getClients().values().stream()
+                .map(client -> (BiConsumer<String, byte[]>) client::sendPluginMesssage)
+                .toArray(BiConsumer[]::new));
+    }
 
+    public PorkDB db;
     private DBMap<UUID, PlayerData> playerDataMap;
     public LoadingCache<UUID, PlayerData> playerData;
     private DBMap<String, UUID> playerNameLookupMap;
