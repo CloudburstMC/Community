@@ -1,6 +1,7 @@
 package com.nukkitx.server.proxy.command;
 
 import com.nukkitx.server.common.messaging.impl.MessageSetOp;
+import com.nukkitx.server.common.messaging.impl.MessageStop;
 import com.nukkitx.server.proxy.ProxyMain;
 import org.itxtech.nemisys.Player;
 import org.itxtech.nemisys.command.Command;
@@ -55,6 +56,7 @@ public class ProxyCommandExecutor implements CommandExecutor {
                 break;
             case "stop":
                 sender.sendMessage("§aStopping network...");
+                ProxyMain.broadcast(new MessageStop());
                 break;
             default:
                 sender.sendMessage(String.format("§cUnknown action: \"%s\"", strings[0]));

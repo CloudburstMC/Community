@@ -1,0 +1,9 @@
+dependencies {
+    compile (project(":common"))    {
+        exclude group: "org.itxtech.nemisys"
+    }
+
+    compile "org.itxtech.synapse:synapse-api:1.0-SNAPSHOT"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

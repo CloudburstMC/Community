@@ -1,0 +1,7 @@
+name: ProxyClientPlugin
+main: com.nukkitx.server.client.ClientMain
+version: "0.0.1"
+api: ["1.0.0"]
+author: DaPorkchop_
+description: Misc. utils for the nemisys proxy running the NukkitX community server
+website: https://github.com/NukkitX/Community

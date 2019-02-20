@@ -2,12 +2,12 @@ package com.nukkitx.server.common.messaging;
 
 import com.nukkitx.server.common.SharedConstants;
 import com.nukkitx.server.common.messaging.impl.MessageSetOp;
+import com.nukkitx.server.common.messaging.impl.MessageStop;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 import net.daporkchop.lib.binary.netty.NettyUtil;
 import net.daporkchop.lib.binary.stream.DataIn;
 import net.daporkchop.lib.binary.stream.DataOut;
@@ -18,7 +18,6 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -34,7 +33,8 @@ public class MessageRegistry {
     protected final Map<Class<? extends Message>, Integer> classes = new IdentityHashMap<>();
 
     {
-        this.register(MessageSetOp.class, MessageSetOp::new);
+        this.register(MessageSetOp.class, MessageSetOp::new)
+                .register(MessageStop.class, MessageStop::new);
     }
 
     protected <T extends Message> MessageRegistry register(@NonNull Class<T> clazz, @NonNull Supplier<T> supplier) {
@@ -57,7 +57,7 @@ public class MessageRegistry {
         }
         byte[] encoded = buf.array().clone();
         buf.release();
-        for (BiConsumer<String, byte[]> sendFunction : sendFunctions)   {
+        for (BiConsumer<String, byte[]> sendFunction : sendFunctions) {
             sendFunction.accept(SharedConstants.CHANNEL_NAME, encoded);
         }
     }
