@@ -21,7 +21,7 @@ public class PlayerData implements NBTSerializable {
     private static final int version = 1;
 
     @NonNull
-    protected String name;
+    protected String name = "";
 
     protected boolean admin;
 

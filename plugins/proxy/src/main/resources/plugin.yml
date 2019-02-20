@@ -11,6 +11,6 @@ commands:
     aliases: ["lobby"]
   proxy:
     description: admin commands
-  server:
-    description: teleports you to a given server
-    aliases: ["transfer","s"]
+#  server:
+#    description: teleports you to a given server
+#    aliases: ["transfer","s"]

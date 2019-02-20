@@ -32,6 +32,8 @@ public class ClientMain extends PluginBase {
         SynapseAPI.getInstance().getMessenger().registerIncomingPluginChannel(this, SharedConstants.CHANNEL_NAME, new PluginMessageListener());
 
         this.synapseEntry = SynapseAPI.getInstance().getSynapseEntries().values().iterator().next();
+
+        this.getServer().getPluginManager().registerEvents(new ClientListener(), this);
     }
 
     @Override

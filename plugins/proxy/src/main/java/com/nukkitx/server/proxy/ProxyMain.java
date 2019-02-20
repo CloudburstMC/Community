@@ -28,6 +28,7 @@ import net.daporkchop.lib.db.container.map.key.DefaultKeyHasher;
 import net.daporkchop.lib.encoding.compression.Compression;
 import net.daporkchop.lib.hash.util.Digest;
 import net.daporkchop.lib.nbt.util.IndirectNBTSerializer;
+import org.itxtech.nemisys.command.CommandExecutor;
 import org.itxtech.nemisys.command.PluginCommand;
 import org.itxtech.nemisys.plugin.PluginBase;
 
@@ -117,9 +118,15 @@ public class ProxyMain extends PluginBase {
 
         this.getServer().getPluginManager().registerEvents(new ProxyListener(), this);
 
-        ((PluginCommand) this.getServer().getCommandMap().getCommand("hub")).setExecutor(new SpecificServerCommandExecutor("hub"));
-        ((PluginCommand) this.getServer().getCommandMap().getCommand("server")).setExecutor(new ServerCommandExecutor());
-        ((PluginCommand) this.getServer().getCommandMap().getCommand("proxy")).setExecutor(new ProxyCommandExecutor());
+        this.command("hub", new SpecificServerCommandExecutor("hub"));
+        this.command("proxy", new ProxyCommandExecutor());
+        //this.command("server", new ServerCommandExecutor());
+    }
+
+    protected void command(@NonNull String name, @NonNull CommandExecutor executor)  {
+        PluginCommand command = (PluginCommand) this.getServer().getCommandMap().getCommand(name);
+        command.setExecutor(executor);
+        command.setGlobal(true);
     }
 
     @Override
@@ -167,9 +174,10 @@ public class ProxyMain extends PluginBase {
                 .expireAfterAccess(1, TimeUnit.HOURS)
                 .removalListener((RemovalListener<K, V>) notification -> {
                     if (notification.getValue() instanceof UUID && ((UUID) notification.getValue()).getMostSignificantBits() == 0L && ((UUID) notification.getValue()).getLeastSignificantBits() == 0L) {
-                        return; //don't save placeholder uuids
+                        map.remove(notification.getKey()); //don't save placeholder uuids
+                    } else {
+                        map.put(notification.getKey(), notification.getValue());
                     }
-                    map.put(notification.getKey(), notification.getValue());
                 })
                 .build(new CacheLoader<K, V>() {
                     @Override

@@ -2,6 +2,7 @@ package com.nukkitx.server.common.messaging.impl;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import com.nukkitx.server.common.SharedConstants;
 import com.nukkitx.server.common.messaging.Message;
 import com.nukkitx.server.common.messaging.MessageRegistry;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,12 @@ public class MessageSetOp implements Message {
 
     @Override
     public void handle(MessageRegistry registry) {
+        if (this.state)  {
+            SharedConstants.OP_UUIDS.add(this.id);
+        } else {
+            SharedConstants.OP_UUIDS.remove(this.id);
+        }
+
         Player player = Server.getInstance().getOnlinePlayers().get(this.id);
         if (player != null) {
             player.setOp(this.state);
