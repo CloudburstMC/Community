@@ -4,6 +4,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
+import com.nukkitx.server.proxy.command.ProxyCommandExecutor;
+import com.nukkitx.server.proxy.command.ServerCommandExecutor;
 import com.nukkitx.server.proxy.command.SpecificServerCommandExecutor;
 import com.nukkitx.server.proxy.storage.CompactUUIDSerializer;
 import com.nukkitx.server.proxy.storage.KeyHasherName;
@@ -109,66 +111,8 @@ public class ProxyMain extends PluginBase {
         this.getServer().getPluginManager().registerEvents(new ProxyListener(), this);
 
         ((PluginCommand) this.getServer().getCommandMap().getCommand("hub")).setExecutor(new SpecificServerCommandExecutor("hub"));
-        ((PluginCommand) this.getServer().getCommandMap().getCommand("server")).setExecutor((sender, command, s, strings) -> {
-            if (!sender.isPlayer()) {
-                sender.sendMessage("§4Not a player!");
-                return true;
-            } else if (strings.length < 1) {
-                sender.sendMessage("§cTarget server required!");
-                return true;
-            }
-            Client client = this.getServer().getClientByDesc(strings[0].toLowerCase());
-            if (client == null) {
-                sender.sendMessage(String.format("§cInvalid target server: \"%s\"", strings[0].toLowerCase()));
-            } else {
-                ((Player) sender).transfer(client);
-                sender.sendMessage(String.format("§aConnecting to \"%s\"...", strings[0].toLowerCase()));
-            }
-            return true;
-        });
-        ((PluginCommand) this.getServer().getCommandMap().getCommand("proxy")).setExecutor((sender, command, s, strings) -> {
-            if (sender.isPlayer() && !this.playerData.getUnchecked(((Player) sender).getUuid()).isAdmin()) {
-                sender.sendMessage("§4Missing permission!");
-                return true;
-            }
-            if (strings.length < 1) {
-                sender.sendMessage("§cAction required!");
-                return true;
-            }
-            switch (strings[0]) {
-                case "reload":
-                    sender.sendMessage("§aReloading config...");
-                    this.onReload();
-                    sender.sendMessage("§aReloaded.");
-                    break;
-                case "op":
-                case "deop":
-                    if (strings.length < 2) {
-                        sender.sendMessage("§cUsername required!");
-                        return true;
-                    }
-                    UUID uuid;
-                    Player player = this.getServer().getPlayer(strings[1]);
-                    if (player == null) {
-                        uuid = this.playerNameLookup.getUnchecked(strings[1]);
-                        if (uuid.getMostSignificantBits() == 0L && uuid.getLeastSignificantBits() == 0L) {
-                            uuid = null;
-                        }
-                    } else {
-                        uuid = player.getUuid();
-                    }
-                    if (uuid == null) {
-                        sender.sendMessage(String.format("§cCouldn't find UUID for player: \"%s\"", strings[1]));
-                        return true;
-                    }
-                    this.playerData.getUnchecked(uuid).setAdmin(strings[0].charAt(0) == 'o');
-                    sender.sendMessage(String.format("§aPlayer \"%s\" %sopped!", strings[1], strings[0].charAt(0) == 'o' ? "" : "de"));
-                    break;
-                default:
-                    sender.sendMessage(String.format("§cUnknown action: \"%s\"", strings[0]));
-            }
-            return true;
-        });
+        ((PluginCommand) this.getServer().getCommandMap().getCommand("server")).setExecutor(new ServerCommandExecutor());
+        ((PluginCommand) this.getServer().getCommandMap().getCommand("proxy")).setExecutor(new ProxyCommandExecutor());
     }
 
     @Override
