@@ -23,3 +23,4 @@ white-list.txt
 #plugin files
 bStats/
 FastAsyncWorldEdit/
+/nemisys/plugins/ProxyPlugin/database/
